@@ -1,0 +1,266 @@
+{
+  "auto_ml": [
+    {
+      "type": "train",
+      "name": "train_1",
+      "enabled": true,
+      "examples_path": "/data/maestro/maestro-v1-v2-ai-tagging-flat-midi-dataset-2020-06-23-tfrecord/train.tfrecord-AI_tagging*",
+      "model_dir": "/data/models/tmp",
+      "num_steps_plan": [],
+      "num_steps_begin": 10,
+      "num_steps_end": 20,
+      "num_steps_gap": 10,
+      "for_server": true,
+      "preprocess_examples": true,
+      "hparams": {
+        "batch_size": 8,
+        "onset_lstm_units": 256,
+        "fc_size": 768,
+        "bidirectional": true,
+        "num_filters": "[48,48,96]",
+        "audio_transform_min_pitch_n_semitones": -0.1,
+        "audio_transform_max_pitch_n_semitones": 0.1
+      }
+    },
+    {
+      "type": "export",
+      "name": "export_1",
+      "enabled": false,
+      "model_dir": "/data/models/tmp",
+      "output_model_path":  "/data/models/tmp/converted_model.tflite",
+      "chunk_frames": 8,
+      "hparams": {
+        "batch_size": 8,
+        "onset_lstm_units": 256,
+        "fc_size": 768,
+        "bidirectional": true,
+        "num_filters": "[48,48,96]",
+        "audio_transform_min_pitch_n_semitones": -0.1,
+        "audio_transform_max_pitch_n_semitones": 0.1
+      }
+    },
+    {
+      "type": "predict",
+      "name": "predict_for_AI_tagging_for_piano_test_dataset_tmp",
+      "enabled": false,
+      "model_path": "/data/models/tmp/converted_model.tflite",
+      "onset_threshold": 0.3,
+      "chunk_padding": 3,
+      "input_dir": "/data/maestro/piano_ai_tagging_dataset/exported_AI_tagging_for_test",
+      "output_dir": "/data/test/ai_tagging_test_results_tmp/predict"
+    },
+    {
+      "type": "infer",
+      "name": "infer_for_maestro-v2-test-dataset-tmp",
+      "enabled": false,
+      "onset_threshold": 0.3,
+      "model_dir": "/data/models/tmp",
+      "examples_path": "/data/maestro/maestro-v1-v2-ai-tagging-flat-midi-dataset-2020-06-23-tfrecord/test.v2-tfrecord-20*",
+      "output_dir": "/data/test/ai_tagging_test_results_tmp/infer",
+      "hparams": {
+        "batch_size": 1,
+        "onset_lstm_units": 256,
+        "fc_size": 768,
+        "bidirectional": true,
+        "num_filters": "[48,48,96]"
+      }
+    },
+    {
+      "type": "ppea",
+      "name": "ppea_for_server_infer",
+      "enabled": true,
+      "mode": "auto_raw",
+      "model_dir": "/data/models/tmp",
+      "dataset":[ 
+        {
+	  "dataset_type": "v1",
+          "name": "maestro-v1.0.0-16000-dataset-server-ai-tagging-tmp",
+          "input_dir": "/data/maestro/maestro-v1.0.0-16000",
+          "output_dir": "/data/test/ai_tagging_test_results_tmp/ppea"
+        },
+        {
+	  "dataset_type": "self",
+          "name": "AI_tagging_for_test-dataset-server-tmp",
+          "input_dir": "/data/maestro/piano_ai_tagging_dataset/exported_AI_tagging_for_test",
+          "output_dir": "/data/test/ai_tagging_test_results_tmp/ppea"
+        },
+        {
+	  "dataset_type": "self",
+          "name": "additional_AI_tagging_dataset-server-tmp",
+          "input_dir": "/data/maestro/piano_ai_tagging_dataset/additional_AI_tagging_dataset",
+          "output_dir": "/data/test/ai_tagging_test_results_tmp/ppea"
+        }
+     ] 
+    },
+    {
+      "type": "analyse",
+      "name": "for_v2.0.0_test_tflite-lstm-full-test-maestro-only-v1-v2-dataset-2020-07-26",
+      "enabled": true,
+      "input_dir": "/data/test/ai_tagging_test_results_tmp/predict",
+      "output_dir": "/data/test/ai_tagging_test_results_tmp/analyse"
+    }
+  ],
+  "train": [
+    {
+      "type": "train",
+      "name": "train_1",
+      "enabled": false,
+      "examples_path": "../../data/maestro/maestro-v1.0.0-tfrecord/train.*",
+      "model_dir": "../../data/models/test-lite-lstm-pitch-n-semitones-0.2",
+      "num_steps": 50000,
+      "preprocess_examples": true,
+      "hparams": {
+        "batch_size": 8,
+        "onset_lstm_units": 256,
+        "fc_size": 768,
+        "bidirectional": true,
+        "num_filters": "[48,48,96]",
+        "audio_transform_min_pitch_n_semitones": -0.2,
+        "audio_transform_max_pitch_n_semitones": 0.1
+      }
+    },
+    {
+      "type": "train",
+      "name": "train_2",
+      "enabled": false,
+      "examples_path": "../../data/maestro/maestro-v1.0.0-tfrecord/train.*",
+      "model_dir": "../../data/models/test-lite-lstm-pitch-n-semitones-0.3",
+      "num_steps": 20000,
+      "preprocess_examples": true,
+      "hparams": {
+        "batch_size": 8,
+        "onset_lstm_units": 256,
+        "fc_size": 768,
+        "bidirectional": true,
+        "num_filters": "[48,48,96]",
+        "audio_transform_min_pitch_n_semitones": -0.3,
+        "audio_transform_max_pitch_n_semitones": 0.1
+      }
+    }
+  ],
+  "export": [
+    {
+      "type": "export",
+      "name": "export_1",
+      "enabled": false,
+      "model_dir": "/home/yanzhaoxi/projects/deepiano/deepiano/test/theone_model_lstm_denoise_20200219/",
+      "output_model_path":  "../../data/models/test-lite-lstm/converted_model_denoise_20200219_8frames.tflite",
+      "chunk_frames": 8
+    },
+    {
+      "type": "export",
+      "name": "export_2",
+      "enabled": false,
+      "model_dir": "/home/yanzhaoxi/projects/deepiano/deepiano/test/theone_model_lstm_denoise_20200219/",
+      "output_model_path":  "../../data/models/test-lite-lstm/converted_model_denoise_20200219_16frames.tflite",
+      "chunk_frames": 16
+    }
+  ],
+
+  "predict": [
+    {
+      "type": "predict",
+      "name": "predict_1",
+      "enabled": false,
+      "model_path": "../../data/models/test-lite-lstm/converted_model_denoise_20200219_8frames.tflite",
+      "onset_threshold": 0.3,
+      "chunk_padding": 3,
+      "input_dir": "/home/ubuntu/lstm/deepiano/data/maestro/AI_tagging",
+      "output_dir": "../../data/test/predict_1_8frames"
+    },
+    {
+      "type": "predict",
+      "name": "predict_2",
+      "enabled": false,
+      "model_path": "../../data/models/test-lite-lstm/converted_model_denoise_20200219_16frames.tflite",
+      "onset_threshold": 0.3,
+      "chunk_padding": 4,
+      "input_dir": "/home/ubuntu/lstm/deepiano/data/maestro/AI_tagging",
+      "output_dir": "../../data/test/predict_2_16frames"
+    }
+  ],
+
+  "infer": [
+    {
+      "type": "infer",
+      "name": "infer_2",
+      "enabled": false,
+      "onset_threshold": 0.3,
+      "model_dir": "/home/yanzhaoxi/projects/deepiano/deepiano/test/theone_model_lstm_denoise_20200219/",
+      "examples_path": "../../data/maestro/maestro-v1.0.0-tfrecord/theone_self_recorded_for_test.*",
+      "output_dir": "../../data/test/infer_no_frames",
+      "hparams": {
+        "batch_size": 1,
+        "onset_lstm_units": 256,
+        "fc_size": 768,
+        "bidirectional": true,
+        "num_filters": "[48,48,96]"
+      }
+    },
+    {
+      "type": "infer",
+      "name": "infer_3",
+      "enabled": false,
+      "onset_threshold": 0.3,
+      "model_dir": "../../data/models/test-lite-lstm-pitch-n-semitones-0.3",
+      "examples_path": "../../data/maestro/maestro-v1.0.0-tfrecord/theone_self_recorded_for_test.*",
+      "output_dir": "../../data/test/infer_3_n03_self_marked",
+      "hparams": {
+        "batch_size": 1,
+        "onset_lstm_units": 256,
+        "fc_size": 768,
+        "bidirectional": true,
+        "num_filters": "[48,48,96]"
+      }
+    },
+    {
+      "type": "infer",
+      "name": "infer_1",
+      "enabled": false,
+      "onset_threshold": 0.3,
+      "model_dir": "/home/yanzhaoxi/projects/deepiano/deepiano/test/theone_model_lstm_denoise_20200219/",
+      "examples_path": "../../data/maestro/maestro-v1.0.0-tfrecord/test_pitch_shift_20_total.*",
+      "output_dir": "../../data/infer_for_pitch_shift_20_n01",
+      "hparams": {
+        "batch_size": 1,
+        "onset_lstm_units": 256,
+        "fc_size": 768,
+        "bidirectional": true,
+        "num_filters": "[48,48,96]"
+      }
+    }
+  ],
+  "ppea": [
+    {
+      "type": "ppea",
+      "name": "ppea_1",
+      "enabled": false,
+      "mode": "local",
+      "input_dir": "../../data/test/infer_3_n03_self_marked",
+      "output_dir": "../../data/test/infer_3_n03_self_marked"
+    }
+  ],
+  "analyse": [
+    {
+      "type": "analyse",
+      "name": "analyse_1",
+      "enabled": false,
+      "input_dir": "../../data/test/infer_3_n03_self_marked",
+      "output_dir": "../../data/test/infer_3_n03_self_marked"
+    },
+    {
+      "type": "analyse",
+      "name": "analyse_2",
+      "enabled": false,
+      "input_dir": "../../data/test/predict_2_16frames",
+      "output_dir": "../../data/test/predict_2_16frames"
+    },
+    {
+      "type": "analyse",
+      "name": "analyse_3",
+      "enabled": false,
+      "input_dir": "../../data/test/infer_no_frames",
+      "output_dir": "../../data/test/infer_no_frames"
+    }
+  ]
+}
